@@ -8,6 +8,16 @@ const archiver = require('archiver');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware pour désactiver le cache pour tous les fichiers statiques
+app.use((req, res, next) => {
+  res.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.header('Pragma', 'no-cache');
+  res.header('Expires', '0');
+  res.header('Surrogate-Control', 'no-store');
+  next();
+});
+
+// Servir les fichiers statiques directement
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +37,40 @@ app.get('/api/health', (req, res) => {
     uptime: process.uptime(),
     memory: process.memoryUsage(),
     version: '1.0.0'
+  });
+});
+
+// Route spéciale pour servir index.html sans cache - mise à jour pour servir index.html directement
+app.get('/fresh', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  
+  fs.readFile(indexPath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Erreur lors de la lecture de index.html:', err);
+      return res.status(500).send('Erreur serveur');
+    }
+    res.send(data);
+  });
+});
+
+// Route racine pour s'assurer que index.html est servi correctement
+app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  
+  fs.readFile(indexPath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Erreur lors de la lecture de index.html:', err);
+      return res.status(500).send('Erreur serveur');
+    }
+    res.send(data);
   });
 });
 

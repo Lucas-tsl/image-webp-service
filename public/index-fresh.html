@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Convertisseur d'images - Version Finale</title>
+  <title>Convertisseur d'images - Modern UI</title>
   <style>
     :root {
       --bg-main: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -349,7 +346,7 @@
     <div class="progress-bar" id="progressBar"><div class="progress-bar-inner" id="progressBarInner"></div></div>
     <h1>🎨 Convertisseur d'images</h1>
     <p class="subtitle">Compressez et convertissez vos images facilement</p>
-    <p class="version-marker" style="background-color: #4CAF50; color: white; padding: 5px; border-radius: 5px;">Version 1.0.2 FINALE (MAJ: 10 juillet) - Convertisseur complet</p>
+    <p class="version-marker" style="background-color: #ffc107; color: #333; padding: 5px; border-radius: 5px;">Version 1.0.1 (MAJ: 10 juillet)</p>
     <form action="/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
       <div class="form-group">
         <label for="images">📁 Sélectionnez vos images :</label>
@@ -385,11 +382,6 @@
   </div>
 
   <script>
-    // Version de cette page - à modifier quand la page est mise à jour
-    const PAGE_VERSION = '1.0.2';
-    // Stockage de la version en local uniquement, pas de redirection
-    localStorage.setItem('pageVersion', PAGE_VERSION);
-    
     // Attendre que le DOM soit chargé
     document.addEventListener('DOMContentLoaded', function() {
       const uploadZone = document.getElementById('uploadZone');
