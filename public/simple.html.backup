@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convertisseur d'images - Simple</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Convertisseur d'images</h1>
+    <p style="text-align: center; color: #666;">Version simplifiée</p>
+    
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>📁 Choisissez vos images</label>
+        <input type="file" name="images" accept="image/*" multiple required>
+      </div>
+
+      <div class="form-group">
+        <label>🎛️ Qualité de compression (1-100)</label>
+        <input type="number" name="quality" value="70" min="1" max="100" required>
+      </div>
+
+      <div class="form-group">
+        <label>🔄 Format de sortie</label>
+        <select name="format">
+          <option value="webp" selected>WebP</option>
+          <option value="avif">AVIF</option>
+          <option value="jpeg">JPEG</option>
+        </select>
+      </div>
+
+      <button type="submit">✨ Convertir les images</button>
+    </form>
+  </div>
+</body>
+</html>

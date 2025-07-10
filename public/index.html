@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convertisseur d'images - Modern UI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2.2em;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px dashed #ddd;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    input[type="file"]:hover {
+      border-color: #667eea;
+      background-color: #f0f4ff;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      background-color: white;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      background-color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .upload-zone {
+      border: 2px dashed #ddd;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .upload-zone:hover {
+      border-color: #667eea;
+      background-color: #f0f4ff;
+    }
+
+    .upload-zone.dragover {
+      border-color: #667eea;
+      background-color: #e6f0ff;
+      transform: scale(1.02);
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      color: #ddd;
+      margin-bottom: 10px;
+    }
+
+    .upload-text {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .preview-area {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
+    }
+
+    .file-info {
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .quality-slider {
+      margin-top: 10px;
+    }
+
+    .quality-value {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #ddd;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #667eea;
+      cursor: pointer;
+      border: none;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #667eea;
+      cursor: pointer;
+      border: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin: 10px;
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .upload-zone {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Convertisseur d'images</h1>
+    <p class="subtitle">Compressez et convertissez vos images facilement</p>
+    
+    <form action="/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
+      <div class="form-group">
+        <label for="images">📁 Sélectionnez vos images :</label>
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-icon">📸</div>
+          <div class="upload-text">Cliquez ici ou glissez vos images</div>
+        </div>
+        <input type="file" name="images" id="images" accept="image/*" multiple required class="hidden">
+      </div>
+
+      <div class="form-group">
+        <label for="quality">🎛️ Qualité de compression : 
+          <span class="quality-value" id="qualityValue">70</span>
+        </label>
+        <input type="number" name="quality" id="quality" value="70" min="1" max="100" required>
+        <div class="quality-slider">
+          <input type="range" id="qualitySlider" min="1" max="100" value="70" title="Slider de qualité" aria-label="Qualité de compression">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="format">🔄 Format de sortie :</label>
+        <select name="format" id="format">
+          <option value="webp" selected>WebP (Recommandé)</option>
+          <option value="avif">AVIF (Moderne)</option>
+          <option value="jpeg">JPEG (Standard)</option>
+        </select>
+      </div>
+
+      <button type="submit">✨ Convertir les images</button>
+    </form>
+
+    <div class="preview-area" id="previewArea">
+      <h3>Aperçu des images :</h3>
+      <div id="previewContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    // Attendre que le DOM soit chargé
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadZone = document.getElementById('uploadZone');
+      const fileInput = document.getElementById('images');
+      const previewArea = document.getElementById('previewArea');
+      const previewContainer = document.getElementById('previewContainer');
+      const qualitySlider = document.getElementById('qualitySlider');
+      const qualityInput = document.getElementById('quality');
+      const qualityValue = document.getElementById('qualityValue');
+      const form = document.getElementById('uploadForm');
+
+      // Vérifier que tous les éléments existent
+      if (!uploadZone || !fileInput || !previewArea || !previewContainer || 
+          !qualitySlider || !qualityInput || !qualityValue || !form) {
+        console.error('Éléments manquants dans le DOM');
+        return;
+      }
+
+      // Synchroniser le slider et l'input de qualité
+      qualitySlider.addEventListener('input', function() {
+        qualityInput.value = this.value;
+        qualityValue.textContent = this.value;
+      });
+
+      qualityInput.addEventListener('input', function() {
+        qualitySlider.value = this.value;
+        qualityValue.textContent = this.value;
+      });
+
+      // Gestion du clic sur la zone d'upload
+      uploadZone.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      // Gestion du drag & drop
+      uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('dragover');
+      });
+
+      uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('dragover');
+      });
+
+      uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        if (e.dataTransfer && e.dataTransfer.files) {
+          const files = e.dataTransfer.files;
+          fileInput.files = files;
+          handleFiles(files);
+        }
+      });
+
+      // Gestion du changement de fichier
+      fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+      });
+
+      function handleFiles(files) {
+        try {
+          if (!files || files.length === 0) {
+            previewArea.style.display = 'none';
+            return;
+          }
+
+          previewContainer.innerHTML = '';
+          previewArea.style.display = 'block';
+
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            if (file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                const imageDiv = document.createElement('div');
+                imageDiv.innerHTML = `
+                  <img src="${e.target.result}" class="preview-image" alt="Aperçu" style="max-width: 100%; max-height: 200px;">
+                  <div class="file-info">
+                    <strong>${file.name}</strong><br>
+                    Taille: ${(file.size / 1024).toFixed(1)} KB<br>
+                    Type: ${file.type}
+                  </div>
+                `;
+                previewContainer.appendChild(imageDiv);
+              };
+              reader.onerror = () => {
+                console.error('Erreur lors de la lecture du fichier');
+              };
+              reader.readAsDataURL(file);
+            }
+          }
+        } catch (error) {
+          console.error('Erreur dans handleFiles:', error);
+        }
+      }
+
+      // Améliorer l'UX du formulaire
+      form.addEventListener('submit', function(e) {
+        try {
+          const button = document.querySelector('button[type="submit"]');
+          if (button) {
+            button.textContent = '⏳ Conversion en cours...';
+            button.disabled = true;
+          }
+        } catch (error) {
+          console.error('Erreur lors de la soumission:', error);
+        }
+      });
+
+      console.log('JavaScript initialisé avec succès');
+    });
+  </script>
+</body>
+</html>

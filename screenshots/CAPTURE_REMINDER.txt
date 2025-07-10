@@ -1,0 +1,2 @@
+N'oubliez pas de prendre une capture d'écran de votre application et de la placer ici pour le README.
+Vous pouvez remplacer ce fichier par une image nommée app-preview.png.
