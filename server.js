@@ -8,6 +8,17 @@ const archiver = require('archiver');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Vérifier si nous sommes en production (Vercel) ou en développement local
+const isProduction = process.env.NODE_ENV === 'production';
+// Définir le répertoire d'uploads selon l'environnement
+// En production (Vercel), utiliser /tmp pour les fichiers temporaires
+const UPLOAD_DIR = isProduction ? '/tmp' : 'uploads';
+
+// Créer le répertoire d'uploads s'il n'existe pas
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+
 // Middleware pour désactiver le cache pour tous les fichiers statiques
 app.use((req, res, next) => {
   res.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -19,12 +30,12 @@ app.use((req, res, next) => {
 
 // Servir les fichiers statiques directement
 app.use(express.static('public'));
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(UPLOAD_DIR));
 app.use(express.urlencoded({ extended: true }));
 
 // Multer config : plusieurs fichiers
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
+  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
   filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
 const upload = multer({ storage });
@@ -95,7 +106,7 @@ app.post('/upload', upload.array('images', 10), async (req, res) => {
       const inputStats = fs.statSync(inputPath);
       const baseName = path.parse(file.originalname).name;
       const outputName = `${baseName}.${format}`;
-      const outputPath = path.join('uploads', outputName);
+      const outputPath = path.join(UPLOAD_DIR, outputName);
 
       // Choisir le bon format de sortie
       let image = sharp(inputPath);
@@ -397,7 +408,7 @@ app.post('/upload', upload.array('images', 10), async (req, res) => {
 
 // Route pour télécharger toutes les images converties dans un ZIP
 app.get('/download-all', (req, res) => {
-  const uploadsDir = path.join(__dirname, 'uploads');
+  const uploadsDir = path.join(__dirname, UPLOAD_DIR);
   
   if (!fs.existsSync(uploadsDir)) {
     return res.status(404).send('Aucun fichier à télécharger');

@@ -34,3 +34,12 @@ Thumbs.db
 !/uploads/.gitkeep
 !/uploads/RueLucas_logo.webp
 !/uploads/Screenshot*.webp
+
+# Fichiers de sauvegarde
+*.backup
+*.bak
+*.old
+*.new
+
+# Vercel
+.vercel
